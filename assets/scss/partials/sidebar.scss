@@ -185,6 +185,7 @@
 }
 
 #i18n-switch {
+    margin-top: auto;
     color: var(--body-text-color);
     display: inline-flex;
     align-content: center;
@@ -200,4 +201,8 @@
             background-color: var(--card-background);
         }
     }
+}
+
+#i18n-switch + #dark-mode-toggle {
+    margin-top: unset;
 }

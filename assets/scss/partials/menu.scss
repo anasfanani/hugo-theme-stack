@@ -145,12 +145,9 @@
         padding: 15px 0;
     }
 
-    &,
-    .menu-bottom-section {
-        gap: 30px;
-        @include respond(xl) {
-            gap: 25px;
-        }
+    gap: 30px;
+    @include respond(xl) {
+        gap: 25px;
     }
 
     &.show {
@@ -200,13 +197,6 @@
                 font-weight: bold;
             }
         }
-    }
-
-    .menu-bottom-section {
-        margin-top: auto;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
     }
 }
 
