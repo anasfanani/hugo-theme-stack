@@ -8,11 +8,11 @@
     <header>
         {{ with .Site.Params.sidebar.avatar }}
             {{- $avatar := resources.Get . -}}
-            {{- $avatarResized := $avatar.Resize "300x" -}}
+            {{- $avatarResized := $avatar.Resize "120x webp" -}}
             {{- $src := $avatarResized.RelPermalink -}}
             <figure class="site-avatar">
                 <a href="{{ $.Site.BaseURL | relLangURL }}">
-                    <img src="{{ $src }}" width="300" height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    <img src="{{ $src }}" width="120" height="120" class="site-logo" loading="lazy" alt="Avatar">
                 </a>
                 {{ with $.Site.Params.sidebar.emoji }}
                     <span class="emoji">{{ . }}</span>

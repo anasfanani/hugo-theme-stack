@@ -8,13 +8,15 @@
                     {{- $Width := $image.resource.Width -}}
                     {{- $Height := $image.resource.Height -}}
                     {{- $Srcset := slice -}}
-                    
-                    {{- if .Page.Site.Params.ImageProcessing.Cover.Enabled -}}
+                    {{- $webp := $image.resource.Resize (printf "%dx%d webp" $Width $Height) -}}
+                    {{- $Permalink = $webp.RelPermalink -}}
+
+                   {{- if .Page.Site.Params.ImageProcessing.Cover.Enabled -}}
                         {{- $keys := slice "small" "big" -}}
                         {{- range $keys -}}
                             {{- with (index $.Page.Site.Params.ImageProcessing.Cover .) -}}
                                 {{- if gt $Width .Threshold -}}
-                                    {{- $resized := $image.resource.Resize (printf "%dx" .Width) -}}
+                                    {{- $resized := $webp.Resize (printf "%dx" .Width) -}}
                                     {{- $Srcset = $Srcset | append (printf `%s %dw` $resized.RelPermalink .Width) -}}
                                 {{- end -}}
                             {{- end -}}
@@ -27,6 +29,7 @@
                         width="{{ $Width }}" 
                         height="{{ $Height }}" 
                         loading="lazy"
+                        decoding="async"
                         alt="Featured image of post {{ .Title }}" />
                 {{ else }}
                     <img src="{{ $image.permalink }}" loading="lazy" alt="Featured image of post {{ .Title }}" />
