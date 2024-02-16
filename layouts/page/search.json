@@ -2,19 +2,19 @@
 {{- $result := slice -}}
 
 {{- range $pages -}}
-    {{- $data := dict "title" .Title "date" .Date "permalink" .Permalink "content" (.Plain) -}}
+    {{- $data := dict "title" .Title "date" .Date "permalink" .RelPermalink "content" (.Plain) -}}
 
     {{- $image := partialCached "helper/image" (dict "Context" . "Type" "articleList") .RelPermalink "articleList" -}}
     {{- if $image.exists -}}
         {{- $imagePermalink := "" -}}
         {{- if and $image.resource .Page.Site.Params.imageProcessing.cover.enabled -}}
             {{- $thumbnail := $image.resource.Fill "120x120" -}}
-            {{- $imagePermalink = (absURL $thumbnail.Permalink) -}}
+            {{- $imagePermalink = $thumbnail.RelPermalink -}}
         {{- else -}}
-            {{- $imagePermalink = $image.permalink -}}
+            {{- $imagePermalink = $image.relpermalink -}}
         {{- end -}}
         
-        {{- $data = merge $data (dict "image" (absURL $imagePermalink)) -}}
+        {{- $data = merge $data (dict "image" $imagePermalink) -}}
     {{- end -}}
 
     {{- $result = $result | append $data -}}
