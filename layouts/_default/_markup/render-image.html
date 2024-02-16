@@ -21,17 +21,29 @@
 		{{- $Height = $image.Height -}}
 		{{- $galleryImage = true -}}
 
+		{{- $wm := (resources.Get "img/watermark.png") }}
+		{{- if $wm }}
+			{{- $size := math.Round (mul $image.Height 0.30) }}
+			{{- $size := cond (ge $size 80) ($size) (80.0) }}
+			{{- $sizeInt := int $size }}
+			{{- $watermark := $wm.Resize (printf "%dx" $sizeInt ) }}
+			{{- $image = $image.Filter (images.Overlay $watermark (sub $image.Width $watermark.Width) (sub $image.Height $watermark.Height)) }}
+		{{- end -}}
+		{{- $webp := $image.Resize (printf "%dx%d webp" $Width $Height) -}}
+        {{- $Permalink = $webp.RelPermalink -}}
+        
 		{{- if $imageProcessing -}}
 			{{- $keys := slice "small" "big" -}}
 			{{- range $keys -}}
 				{{- with (index $.Page.Site.Params.ImageProcessing.Content .) -}}
 					{{- if gt $Width .Threshold -}}
-						{{- $resized := $image.Resize (printf "%dx" .Width) -}}
+						{{- $resized := $webp.Resize (printf "%dx" .Width) -}}
 						{{- $Srcset = $Srcset | append (printf `%s %dw` $resized.RelPermalink .Width) -}}
 					{{- end -}}
 				{{- end -}}
 			{{- end -}}
-			{{- $Srcset = $Srcset | append (printf `%s %dw` $Permalink $Width) -}}
+			{{- $resized := $webp.Resize (printf "%dx%d webp Box" $Width $Height) -}}
+			{{- $Srcset = $Srcset | append (printf `%s %dw` $resized.RelPermalink $Width) -}}
 		{{- end -}}
 	{{- end -}}
 {{- end -}}
@@ -41,6 +53,7 @@
 	{{ with $Height }}height="{{ . }}"{{ end }}
 	{{ with $Srcset }}srcset="{{ delimit . `, ` }}"{{ end }}
 	loading="lazy"
+	decoding="async"
 	{{ with $alt }}
 		alt="{{ . }}"
 	{{ end }}
