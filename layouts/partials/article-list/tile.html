@@ -9,9 +9,13 @@
                     {{- $Permalink := $imageRaw.RelPermalink -}}
                     {{- $Width := $imageRaw.Width -}}
                     {{- $Height := $imageRaw.Height -}}
+                    
+                    {{- $webp := $image.resource.Resize (printf "%dx%d webp" $Width $Height) -}}
+                    {{- $Permalink = $webp.RelPermalink -}}
+                    {{- $imageRaw := $webp | resources.Fingerprint "md5" -}}
 
                     {{- if .context.Site.Params.imageProcessing.cover.enabled -}}
-                        {{- $thumbnail := $imageRaw.Fill .size -}}
+                        {{- $thumbnail := $imageRaw.Fit .size -}}
                         {{- $Permalink = $thumbnail.RelPermalink -}}
                         {{- $Width = $thumbnail.Width -}}
                         {{- $Height = $thumbnail.Height -}}
