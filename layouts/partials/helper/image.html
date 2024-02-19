@@ -58,4 +58,12 @@
 
 {{ end }}
 
+{{ if $result.resource }}
+    {{ $width := $result.resource.Width }}
+    {{ $height := $result.resource.Height }}
+    {{ $webp := $result.resource.Resize (printf "%dx%d webp" $width $height) }}
+    {{ $result = merge $result (dict "permalink" $webp.RelPermalink) }}
+    {{ $result = merge $result (dict "resource" $webp) }}
+{{ end }}
+
 {{ return $result }}
